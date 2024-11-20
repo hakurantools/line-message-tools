@@ -5,32 +5,31 @@ function generateShareLinks() {
         return;
     }
 
-    // テキストを行ごとに分割
-    const lines = inputText.split('\n');
-    const lineLinks = [];
+    // テキストを1行にする
+    const line = inputText.trim();
 
-    // 各行にランダムなバイナリコードを追加
-    lines.forEach(line => {
-        if (line.trim() !== "") {
-            const randomBinary = generateRandomBinary();
-            const modifiedLine = `${line} ${randomBinary}`;
-            const encodedMessage = encodeURIComponent(modifiedLine);
-            const shareLink = `https://line.me/R/msg/text/${encodedMessage}`;
+    // 200回繰り返してメッセージを縦に表示
+    let shareLinks = [];
+    for (let i = 0; i < 200; i++) {
+        const randomBinary = generateRandomBinary(); // ランダムな二進数
+        const modifiedLine = `${line} ${randomBinary}`; // メッセージに二進数を追加
+        const encodedMessage = encodeURIComponent(modifiedLine); // エンコード
+        const shareLink = `https://line.me/R/msg/text/${encodedMessage}`;
 
-            // リダイレクトを加えるためにaタグを表示
-            lineLinks.push(`<a href="${shareLink}" target="_blank" onclick="redirectToShareLink(event, '${shareLink}')">${shareLink}</a>`);
-        }
-    });
+        // リンクリストに追加
+        shareLinks.push(`<a href="${shareLink}" target="_blank" onclick="redirectToShareLink(event, '${shareLink}')">${shareLink}</a>`);
+    }
 
-    // 結果を表示
+    // 結果を縦に表示
     const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = lineLinks.join('<br>');
+    resultDiv.innerHTML = shareLinks.join('<br>');
 
     // コピー用ボタンを表示
     document.getElementById('copyButton').style.display = 'block';
 }
 
 function generateRandomBinary() {
+    // ランダムな4桁の二進数を生成
     const randomNum = Math.floor(Math.random() * 16); // 16進数のバイナリ生成
     return `#${randomNum.toString(2).padStart(4, '0')}`;  // バイナリ形式
 }
@@ -47,3 +46,4 @@ function copyLink() {
         alert('リンクがコピーされました！');
     });
 }
+
