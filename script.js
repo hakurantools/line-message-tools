@@ -1,43 +1,49 @@
-document.getElementById("convert-btn").addEventListener("click", () => {
-    const inputLink = document.getElementById("input-link").value.trim();
-    const linkType = document.getElementById("link-type").value;
-
-    let ticket = inputLink.match(/g2\/([a-zA-Z0-9_-]+)/);
-    if (!ticket || ticket.length < 2) {
-        alert("無効なリンク形式です。正しいリンクを入力してください。");
+function generateShareLinks() {
+    const inputText = document.getElementById('inputText').value;
+    if (!inputText) {
+        alert("テキストを入力してください");
         return;
     }
 
-    ticket = ticket[1];
-    let convertedLink;
+    // テキストを行ごとに分割
+    const lines = inputText.split('\n');
+    const lineLinks = [];
 
-    switch (linkType) {
-        case "report":
-            convertedLink = `line://square/report?ticket=${ticket}`;
-            break;
-        case "invite":
-            convertedLink = `line://square/ti/g2/${ticket}`;
-            break;
-        case "join":
-            convertedLink = `line://square/join?ticket=${ticket}`;
-            break;
-        case "browser":
-            convertedLink = `https://square-api.line.me/smw/v2/static/sm/html/#/squareCover/${ticket}`;
-            break;
-        default:
-            alert("形式を選択してください。");
-            return;
-    }
+    // 各行にランダムなバイナリコードを追加
+    lines.forEach(line => {
+        if (line.trim() !== "") {
+            const randomBinary = generateRandomBinary();
+            const modifiedLine = `${line} ${randomBinary}`;
+            const encodedMessage = encodeURIComponent(modifiedLine);
+            const shareLink = `https://line.me/R/msg/text/${encodedMessage}`;
 
-    const resultDiv = document.getElementById("result");
-    const convertedLinkElement = document.getElementById("converted-link");
-
-    convertedLinkElement.textContent = convertedLink;
-    resultDiv.style.display = "block";
-
-    document.getElementById("copy-btn").addEventListener("click", () => {
-        navigator.clipboard.writeText(convertedLink)
-            .then(() => alert("リンクがコピーされました！"))
-            .catch(err => alert("コピーに失敗しました: " + err));
+            // リダイレクトを加えるためにaタグを表示
+            lineLinks.push(`<a href="${shareLink}" target="_blank" onclick="redirectToShareLink(event, '${shareLink}')">${shareLink}</a>`);
+        }
     });
-});
+
+    // 結果を表示
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = lineLinks.join('<br>');
+
+    // コピー用ボタンを表示
+    document.getElementById('copyButton').style.display = 'block';
+}
+
+function generateRandomBinary() {
+    const randomNum = Math.floor(Math.random() * 16); // 16進数のバイナリ生成
+    return `#${randomNum.toString(2).padStart(4, '0')}`;  // バイナリ形式
+}
+
+function redirectToShareLink(event, url) {
+    // リダイレクト前に任意の処理を追加可能
+    event.preventDefault(); // デフォルトのリンククリック動作を停止
+    window.location.href = url; // リダイレクト
+}
+
+function copyLink() {
+    const resultText = document.getElementById('result').textContent;
+    navigator.clipboard.writeText(resultText).then(() => {
+        alert('リンクがコピーされました！');
+    });
+}
