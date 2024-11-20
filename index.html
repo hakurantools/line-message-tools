@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>秘密結社総合本部作成リンク変更ツール</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>秘密結社総合本部作成リンク変更ツール</h1>
+            <p>リンクを入力して、希望の形式を選択してください。</p>
+        </header>
+        <main>
+            <div class="form-group">
+                <label for="input-link">変換したいリンクを入力:</label>
+                <input type="text" id="input-link" placeholder="例: https://line.me/ti/g2/xxxx">
+            </div>
+            <div class="form-group">
+                <label for="link-type">変換形式を選択:</label>
+                <select id="link-type">
+                    <option value="report">通報リンク</option>
+                    <option value="invite">招待リンク</option>
+                    <option value="join">参加リンク</option>
+                    <option value="browser">ブラウザ用リンク</option>
+                </select>
+            </div>
+            <button id="convert-btn">リンクを変換</button>
+            <div id="result" class="result">
+                <h2>変換結果:</h2>
+                <p id="converted-link">ここに変換されたリンクが表示されます</p>
+                <button id="copy-btn">リンクをコピー</button>
+            </div>
+        </main>
+        <footer>
+            <p>※このツールは開発者が責任を負いません。ご利用は自己責任でお願いします。</p>
+        </footer>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
+
