@@ -67,6 +67,7 @@ button:hover {
     margin-top: 20px;
     color: #007acc;
     word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 footer {
